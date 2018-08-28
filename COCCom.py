@@ -38,7 +38,7 @@ class COCCom:
         if self.state != 'searched':
             return None
         else:
-            check_gold = ImageGrab.grab(bbox=(48,105,110,120))
+            check_gold = ImageGrab.grab(bbox=(45,130,110,145))
             check_gold_g = check_gold.convert('L')
             inverted_image = PIL.ImageOps.invert(check_gold_g)
             parsed = pytesseract.image_to_string( inverted_image, config='--psm 7 digits').\
@@ -71,5 +71,53 @@ class COCCom:
     def get_state(self):
         return self.state
     
-    
-    
+    def end_attack(self):
+        if self.state != 'seaeched':
+            return None
+        else:
+            click(70,390)
+            time.sleep(1)
+            click(510,350)
+            self.state = 'home'
+        
+    def make_unit(self):
+        if self.state != 'home':
+            return None
+        else:
+            click(40,380)
+            time.sleep(1)
+            click(540,170)
+            time.sleep(1)
+            click(735,569)
+            time.sleep(1)
+            click(780,170)
+        
+    def check_hole(self):
+        img = np.array(ImageGrab.grab(bbox=(0,0,830,540)))
+        template = cv2.imread('template3.jpg',0)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        res = cv2.matchTemplate(img,template,cv2.TM_SQDIFF)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        
+        print (min_val)
+        
+        if min_val < 5300000:
+            return True
+        else: return False
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
